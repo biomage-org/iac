@@ -1,4 +1,4 @@
-{{ contains "api" .Values.biomageCi.repo }}
+{{ if contains "api" .Values.biomageCi.repo }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
