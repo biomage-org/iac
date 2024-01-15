@@ -110,7 +110,7 @@ jobs:
         name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ci-iac-role
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ci-role-iac
           role-duration-seconds: 4800
           aws-region: ${{ secrets.AWS_REGION }}
 
@@ -234,7 +234,7 @@ jobs:
         name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ci-iac-role
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ci-role-iac
           role-duration-seconds: 4800
           aws-region: ${{ secrets.AWS_REGION }}
 
@@ -427,15 +427,15 @@ jobs:
           done < "/tmp/users_to_remove"
 
       # see https://eksctl.io/usage/iam-identity-mappings/
-      # Grant login rights to ci-iac-role
+      # Grant login rights to ci-role-iac
       - id: add-ci-iac-oidc-cluster-role
         name: Allow the OIDC role to log in to our cluster.
         run: |-
           eksctl create iamidentitymapping \
             --cluster=biomage-$CLUSTER_ENV \
-            --arn arn:aws:iam::${{ steps.setup-aws.outputs.aws-account-id }}:role/ci-iac-role \
+            --arn arn:aws:iam::${{ steps.setup-aws.outputs.aws-account-id }}:role/ci-role-iac \
             --group system:masters \
-            --username ci-iac-role
+            --username ci-role-iac
 
       # SSO access to cluster is only added if accessing AWS and cluster using SSO
       - id: allow-sso-roles-to-access-cluster
@@ -672,7 +672,7 @@ jobs:
         name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ci-iac-role
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ci-role-iac
           role-duration-seconds: 3600
           aws-region: ${{ secrets.AWS_REGION }}
 
